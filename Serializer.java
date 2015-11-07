@@ -60,16 +60,16 @@ public class Serializer
 					for(int i = 0;i<Array.getLength(array);i++)
 					{
 						Element value = new Element("value");
-						value.setText(c.get(object,i));
+						value.setText(Array.get(c,i));
 						objectElement.addContent(value);
 					}
 				}
 				else
 				{
-					for(int j = 0;j < Array.getLength(array);i++)
+					for(int j = 0;j < Array.getLength(array);j++)
 					{
 						Element ref = new Element("reference");
-						id = getID(c.get(object,j));
+						id = getID(Array.get(c,j));
 						if(id != -1)
 						{
 							ref.setText("")
