@@ -47,6 +47,8 @@ public class ObjectCreator
 			{
 				Object fieldType = myFields[f].getType();
 				System.out.print("Set the value of the "+myFields[f].getType().getSimpleName()+" named "+myFields[f].getName()+" : ");
+				try
+				{
 				if(myFields[f].getType().getSimpleName() == "Integer") {
 					int value = in.nextInt();
 					myFields[f].set(obj,value); }
@@ -71,6 +73,11 @@ public class ObjectCreator
 				else if(myFields[f].getType().getSimpleName() == "Byte") {
 					byte value = in.nextByte();
 					myFields[f].set(obj,value); }
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 		return obj;
