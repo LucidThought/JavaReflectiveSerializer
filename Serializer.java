@@ -1,4 +1,4 @@
-import java.lang.reflect.Array;
+import java.lang.reflect.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -103,7 +103,7 @@ public class Serializer
 		
 		return doc;
 	}
-	
+/*
 	private ArrayList<Element> serializeFields(Field[] fields, Object object)
 	{
 		ArrayList<Element> elements = new ArrayList<Element>;
@@ -122,7 +122,7 @@ public class Serializer
 			}
 		}
 	}
-	
+*/	
 	private int getID(Object object)
 	{
 		Integer id = referenceID;
@@ -137,4 +137,5 @@ public class Serializer
 		
 		return id;
 	}
+
 }

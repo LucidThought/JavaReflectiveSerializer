@@ -29,7 +29,7 @@ public class SocketAcceptor
 	
 	public String getMessage()
 	{
-		String message = "";
+		StringBuilder message = new StringBuilder();
 		boolean reading = true;
 		boolean socketClosed = false;
 		
@@ -41,7 +41,7 @@ public class SocketAcceptor
 				
 				while((dataByte = (char)socket.getInputStream().read()) != END_OF_STREAM)
 				{
-					message += Character.toString(dataByte);
+					message.append(dataByte);
 				}
 				socketClosed = dataByte == END_OF_STREAM;
 				reading = false;
@@ -58,7 +58,7 @@ public class SocketAcceptor
 		else
 			System.out.println("Socket is not closed");
 		
-		return message
+		return message.toString();
 	}
 
 	public void acceptConnection()
