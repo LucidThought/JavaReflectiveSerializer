@@ -122,6 +122,7 @@ public class Serializer
 				
 			}
 		}
+		return elements;
 	}
 	
 	private int getID(Object object)
