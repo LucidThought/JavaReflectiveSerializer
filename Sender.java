@@ -16,11 +16,10 @@ public class Sender
 	public static void main(String[] args)
 	{
 		initialize(args);
-		
+		Object obj = objCreator.createObject();
+
 		while(connected)
-		{
-			Object obj = objCreator.createObject();
-			
+		{	
 			if(!connected)
 			{
 				continue;
