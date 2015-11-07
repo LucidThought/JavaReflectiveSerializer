@@ -60,7 +60,7 @@ public class Serializer
 					for(int i = 0;i<Array.getLength(array);i++)
 					{
 						Element value = new Element("value");
-						value.setText()
+						value.setText(c.get(object,i);
 						objectElement.addContent(value);
 					}
 				}
@@ -72,11 +72,11 @@ public class Serializer
 						id = getID(Array, j);
 						if(id != -1)
 						{
-							ref.setText()
+							ref.setText("")
 							// add each array element
 						}
 					}
-					for(int k - 0;k<Array.getLength(array);k++)
+					for(int k = 0;k<Array.getLength(array);k++)
 					{
 						serialize(Array.get(array,k);
 					}
