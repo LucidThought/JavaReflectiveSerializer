@@ -53,7 +53,7 @@ public class Serializer
 			if(c.isArray())
 			{
 				Object array = object;
-				objectElement.setAttribute(new Attribute("length", Integer.toString(Array.getLength(array)));
+				objectElement.setAttribute(new Attribute("length", Integer.toString(Array.getLength(array))));
 				
 				if(c.getComponentType().isPrimitive())
 				{
