@@ -103,7 +103,7 @@ public class Serializer
 		
 		return doc;
 	}
-/*
+
 	private ArrayList<Element> serializeFields(Field[] fields, Object object)
 	{
 		ArrayList<Element> elements = new ArrayList<Element>;
@@ -122,7 +122,7 @@ public class Serializer
 			}
 		}
 	}
-*/	
+	
 	private int getID(Object object)
 	{
 		Integer id = referenceID;

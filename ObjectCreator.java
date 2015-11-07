@@ -72,6 +72,7 @@ public class ObjectCreator
 					myFields[f].set(obj,value); }
 			}
 		}
+		return obj;
 	}
 
 /*	private SimpleObject createSimpleObject()

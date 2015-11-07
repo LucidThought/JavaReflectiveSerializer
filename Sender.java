@@ -1,5 +1,4 @@
 // This is meant to be a skeleton of the Sender class for assignment 3
-import java.lang.reflect.Method;
 import java.lang.reflect.*;
 import java.lang.Class;
 import java.util.Arrays;
