@@ -44,4 +44,14 @@ public class Network
 			e.printStackTrace();
 		}
 	}
+
+	public void setIP(String newIP)
+	{
+		ip = newIP;
+	}
+
+	public void setPort(String newPort)
+	{
+		port = String.toInteger(newPort);
+	}
 }

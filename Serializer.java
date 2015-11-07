@@ -38,7 +38,7 @@ public class Serializer
 			
 			if(currentElement++ == 0)
 			{
-				doc = new Document()
+				doc = new Document();
 				root = new Element("serialized");
 				doc.setRootElement(root);
 			}
@@ -46,9 +46,9 @@ public class Serializer
 			Integer id = getID(object);
 		
 			Element objectElement = new Element("object");
-			objectElement.setAttribute(new Attribute("class", c.getname()));
+			objectElement.setAttribute(new Attribute("class", c.getName()));
 			objectElement.setAttribute(new Attribute("id", id.toString()));
-			doc.getRootElement.addContent(objectElement);
+			doc.getRootElement().addContent(objectElement);
 
 			if(c.isArray())
 			{
@@ -60,7 +60,7 @@ public class Serializer
 					for(int i = 0;i<Array.getLength(array);i++)
 					{
 						Element value = new Element("value");
-						value.setText(Array.get(c,i));
+						value.setText(Array.get(c,i).toString());
 						objectElement.addContent(value);
 					}
 				}
@@ -72,13 +72,13 @@ public class Serializer
 						id = getID(Array.get(c,j));
 						if(id != -1)
 						{
-							ref.setText("")
+							ref.setText("");
 							// add each array element
 						}
 					}
 					for(int k = 0;k<Array.getLength(array);k++)
 					{
-						serialize(Array.get(array,k);
+						serialize(Array.get(array,k));
 					}
 				}
 			}
@@ -107,7 +107,7 @@ public class Serializer
 
 	private ArrayList<Element> serializeFields(Field[] fields, Object object)
 	{
-		ArrayList<Element> elements = new ArrayList<Element>;
+		ArrayList<Element> elements = new ArrayList<Element>();
 		for(Field f : fields)
 		{
 			try
