@@ -33,7 +33,7 @@ public class Sender
 			Document doc = serializer.serialize(obj);
 			String xmlString = XMLtoString(doc);
 			
-			network.send(xmlString);
+			networkConnection.send(xmlString);
 		}
 	}
 	

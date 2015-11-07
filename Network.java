@@ -50,8 +50,8 @@ public class Network
 		ip = newIP;
 	}
 
-	public void setPort(String newPort)
+	public void setPort(int newPort)
 	{
-		port = String.toInteger(newPort);
+		port = newPort;
 	}
 }
