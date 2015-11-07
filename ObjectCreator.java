@@ -21,18 +21,19 @@ public class ObjectCreator
 	
 	public Object createObject()
 	{	
+		Object object = null;
 		try
 		{
 			userClass = Class.forName(className);
-			Object object = userClass.newInstance();
+			object = userClass.newInstance();
 			object = setFields(object);
-
-			return object;
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
+
+		return object;
 	}
 	
 	private Object setFields(Object obj)
