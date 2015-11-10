@@ -1,4 +1,3 @@
-import java.lang.reflect.Method;
 import java.lang.reflect.*;
 import java.lang.Class;
 import java.util.Arrays;
@@ -11,29 +10,66 @@ public class ObjectCreator
 	private String className;
 	private Scanner in;
 	private Class userClass = null;
+	private Object userObject = null;
+	public UI messages = new UI();
+	
 
 	public ObjectCreator()
 	{
 		in = new Scanner(System.in);
-		System.out.print("Enter the name of your class file: ");
-		className = in.nextLine();
 	}
 	
 	public Object createObject()
 	{	
 		Object object = null;
+		messages.printObjectTypes();
+		String selection = in.nextLine();
+		
+		if(selection.equalsIgnoreCase("1")) {
+			return makeSimpleClass();
+		}
+		else if(selection.equalsIgnoreCase("2")) {
+						System.out.println("make this");
+		}
+		else if(selection.equalsIgnoreCase("3")) {
+						System.out.println("make this");
+		}
+		else if(selection.equalsIgnoreCase("4")) {
+						System.out.println("make this");
+		}
+		else if(selection.equalsIgnoreCase("5")) {
+						System.out.println("make this");
+		}
+	
+		return object;
+	}
+	
+	private Object makeSimpleClass()
+	{
+		Class cl = null;
+		Object simple = null;
+		int[] myIntegers = new int[2];
+		System.out.print("Enter an integer value: ");
+		myIntegers[0] = in.nextInt();
+		System.out.print("Enter another integer value: ");
+		myIntegers[1] = in.nextInt();
 		try
 		{
-			userClass = Class.forName(className);
-			object = userClass.newInstance();
-			object = setFields(object);
+			cl = Class.forName("SimpleClass");
+			simple = userClass.newInstance();
+			
+			Field[] myFields = cl.getDeclaredFields();
+			for(int f = 0; f < myFields.length; f++)
+			{
+				myFields[f].setInt(simple,myIntegers[f]);
+			}
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-
-		return object;
+		
+		return simple;
 	}
 	
 	private Object setFields(Object obj)
@@ -47,37 +83,7 @@ public class ObjectCreator
 			{
 				Object fieldType = myFields[f].getType();
 				System.out.print("Set the value of the "+myFields[f].getType().getSimpleName()+" named "+myFields[f].getName()+" : ");
-				try
-				{
-				if(myFields[f].getType().getSimpleName() == "Integer") {
-					int value = in.nextInt();
-					myFields[f].set(obj,value); }
-				else if(myFields[f].getType().getSimpleName() == "String") {
-					String value = in.nextLine();
-					myFields[f].set(obj,value); }
-				else if(myFields[f].getType().getSimpleName() == "Boolean") {
-					boolean value = in.nextBoolean();
-					myFields[f].set(obj,value); }
-				else if(myFields[f].getType().getSimpleName() == "Double") {
-					double value = in.nextDouble();
-					myFields[f].set(obj,value); }
-				else if(myFields[f].getType().getSimpleName() == "Float") {
-					float value = in.nextFloat();
-					myFields[f].set(obj,value); }
-				else if(myFields[f].getType().getSimpleName() == "Long") {
-					long value = in.nextLong();
-					myFields[f].set(obj,value); }
-				else if(myFields[f].getType().getSimpleName() == "Short") {
-					short value = in.nextShort();
-					myFields[f].set(obj,value); }
-				else if(myFields[f].getType().getSimpleName() == "Byte") {
-					byte value = in.nextByte();
-					myFields[f].set(obj,value); }
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-				}
+
 			}
 		}
 		return obj;
