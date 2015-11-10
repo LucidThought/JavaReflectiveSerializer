@@ -44,50 +44,20 @@ public class ObjectCreator
 		return object;
 	}
 	
-	private Object makeSimpleClass()
+	private SimpleClass makeSimpleClass()
 	{
-		Class cl = null;
-		Object simple = null;
-		int[] myIntegers = new int[2];
-		System.out.print("Enter an integer value: ");
-		myIntegers[0] = in.nextInt();
-		System.out.print("Enter another integer value: ");
-		myIntegers[1] = in.nextInt();
-		try
-		{
-			cl = Class.forName("SimpleClass");
-			simple = userClass.newInstance();
-			
-			Field[] myFields = cl.getDeclaredFields();
-			for(int f = 0; f < myFields.length; f++)
-			{
-				myFields[f].setInt(simple,myIntegers[f]);
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		System.out.println("Simple Class Object:: ");
+		SimpleClass simple = new SimpleClass();
+
+		System.out.print("Give me a number (integer): ");
+		simple.numberOne = in.nextInt();
+		in.nextLine();
+		System.out.print("Give me some letters (String): ");
+		simple.lettersTwo = in.nextLine();
 		
 		return simple;
 	}
 	
-	private Object setFields(Object obj)
-	{
-		Field[] myFields = userClass.getDeclaredFields();
-		for(int f=0;f<myFields.length;f++)
-		{
-			if (!myFields[f].isAccessible()) {
-				myFields[f].setAccessible(true); }
-			if(myFields[f].getType().isPrimitive())
-			{
-				Object fieldType = myFields[f].getType();
-				System.out.print("Set the value of the "+myFields[f].getType().getSimpleName()+" named "+myFields[f].getName()+" : ");
-
-			}
-		}
-		return obj;
-	}
 
 /*	private SimpleObject createSimpleObject()
 	{

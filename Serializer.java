@@ -1,7 +1,9 @@
 import java.lang.reflect.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Map;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.ArrayList;
 
 import org.jdom2.Element;
@@ -16,18 +18,48 @@ public class Serializer
 	private Element root;
 	
 	private Integer referenceID = 0;
-	private HashMap<Object, Integer> referenceMap = new HashMap<Object, Integer>();
+	private IdentityHashMap myMap = null;
 	
 	private int currentElement = 0;
 	private ArrayList<Object> serializedObjects = new ArrayList<Object>();
 	
 	public Serializer()
 	{
-		
+		myMap = new IdentityHashMap();
 	}
 	
-	public Document serialize(Object object)
+	public Document serialize(Object object, Document target) throws Exception
 	{
+		String current = Integer.toString(myMap.size());
+		myMap.put(object,current);
+		Class objectClass = object.getClass();
+
+		Element thisObject = new Element("object");
+		thisObject.setAttribute("class",objectClass.getName());
+		thisObject.setAttribute("id",current);
+		target.getRootElement().addContent(thisObject);
+
+		Field[] myFields = objectClass.getDeclaredFields();
+		for(int f = 0; f < myFields.length; f++)
+		{
+			if (!myFields[f].isAccessible())
+				myFields[f].setAccessible(true);
+
+			Element fieldElement = new Element("field");
+			fieldElement.setAttribute("name",myFields[f].getName());
+			fieldElement.setAttribute("declaringclass",myFields[f].getDeclaringClass().getName());
+			Class type = myFields[f].getType();
+			Object inner = myFields[f].get(object);
+			if (Modifier.isTransient(myFields[f].getModifiers()))
+			{
+				inner = null;
+			}
+			fieldElement.addContent(innerSerialize(type, inner, target));
+
+			thisObject.addContent(fieldElement);
+		}
+		return target;
+/*
 		if(object == null)
 		{
 			
@@ -103,6 +135,31 @@ public class Serializer
 		}
 		
 		return doc;
+*/
+	}
+
+	private Element innerSerialize(Class type, Object owner, Document target) throws Exception
+	{
+		if (owner == null)
+			return new Element("null");
+		else if (!type.isPrimitive())
+		{
+			Element reference = new Element("reference");
+			if(myMap.containsKey(owner))
+				reference.setText(myMap.get(owner).toString());
+			else
+			{
+				reference.setText(Integer.toString(myMap.size()));
+				serialize(owner, target);
+			}
+			return reference;
+		}
+		else
+		{
+			Element value = new Element("value");
+			value.setText(owner.toString());
+			return value;
+		}
 	}
 
 	private ArrayList<Element> serializeFields(Field[] fields, Object object)
@@ -124,20 +181,4 @@ public class Serializer
 		}
 		return elements;
 	}
-	
-	private int getID(Object object)
-	{
-		Integer id = referenceID;
-		
-		if(referenceMap.containsKey(object))
-			id = referenceMap.get(object);
-		else
-		{
-			referenceMap.put(object, id);
-			referenceID++;
-		}
-		
-		return id;
-	}
-
 }

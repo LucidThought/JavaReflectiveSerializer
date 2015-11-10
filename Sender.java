@@ -17,6 +17,7 @@ public class Sender
 	private static ObjectCreator objCreator = null;
 	
 	public static boolean connected;
+	private String fileName = "Objects.xml";
 	
 	public static void main(String[] args)
 	{
@@ -29,11 +30,17 @@ public class Sender
 			{
 				continue;
 			}
+			try
+			{
+				Document doc = serializer.serialize(obj, new Document(new Element("serialized")));
+				String xmlString = XMLtoString(doc);
 			
-			Document doc = serializer.serialize(obj);
-			String xmlString = XMLtoString(doc);
-			
-			networkConnection.send(xmlString);
+				networkConnection.send(xmlString);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 	

@@ -1,48 +1,32 @@
 import java.net.Socket;
+import java.net.ServerSocket;
+import java.io.IOException;
 import java.io.OutputStream;
 
 public class Network
 {
 	private Socket socket = null;
-	private int port = 4321;
+	private int listeningPort = 12345;
 	private String ip = "localhost";
 	
-	public void send(String message)
+	public Network()
+	{ }
+
+	public Network(int port)
 	{
-		if(socket == null)
-		{
-			connect();
-		}
-		else if (socket.isConnected())
-		{
-			try
-			{
-				OutputStream out = socket.getOutputStream();
-				out.write(message.getBytes());
-				out.flush();
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-		else
-		{
-			System.out.println("Socket unavailable");
-		}
+		listeningPort = port;
 	}
-	
-	public void connect()
+
+	public void send(String message) throws IOException
 	{
-		try
-		{
-			socket = new Socket(ip, port);
-		}
-		catch(Exception e)
-		{
-			Sender.connected = false;
-			e.printStackTrace();
-		}
+		ServerSocket server = new ServerSocket(listeningPort);
+		
+		System.out.println("Awaiting Connection...");
+		Socket clientSocket = server.accept();
+		System.out.println("Connection from "+clientSocket.getInetAddress().toString()+" accepted.");
+		
+
+		
 	}
 
 	public void setIP(String newIP)
@@ -52,6 +36,6 @@ public class Network
 
 	public void setPort(int newPort)
 	{
-		port = newPort;
+		listeningPort = newPort;
 	}
 }
