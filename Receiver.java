@@ -1,4 +1,8 @@
 import org.jdom2.Document;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.net.Socket;
+import java.util.ArrayList;
 
 public class Receiver
 {
