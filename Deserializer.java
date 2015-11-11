@@ -1,6 +1,14 @@
+import org.jdom2.*;
+import org.jdom2.input.*;
+import java.util.Scanner;
+import java.io.InputStream;
+import java.io.ByteArrayInputStream;
+import java.util.*;
 
 public class Deserializer
 {
+	private Scanner in;
+
 	public Deserializer()
 	{
 		in = new Scanner(System.in);
@@ -12,17 +20,17 @@ public class Deserializer
 		try
 		{
 			SAXBuilder docBuilder = new SAXBuilder();
-			InputStream socStrem = new ByteArrayInputStream(documentString.getBytes("UTF-8"));
+			InputStream docStream = new ByteArrayInputStream(message.getBytes("UTF-8"));
 			doc = docBuilder.build(docStream);
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace()
+			e.printStackTrace();
 		}
 		return doc;
 	}
 	
-	public Object parseDocument()
+	public Object parseDocument(Document doc)
 	{
 		List<Element> objectElements = doc.getRootElement().getChildren("object");
 	}
@@ -32,7 +40,7 @@ public class Deserializer
 		Object obj = null;
 		try
 		{
-			initialiazeReferenceMap(doc);
+			//initialiazeReferenceMap(doc);
 			obj = parseDocument(doc);
 		}
 		catch(Exception e)

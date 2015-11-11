@@ -14,6 +14,10 @@ public class SocketAcceptor
 	{
 		createServerSocket(4321);
 	}
+	public SocketAcceptor(int newSocket)
+	{
+		create
+	}
 	
 	private void createServerSocket(int port)
 	{

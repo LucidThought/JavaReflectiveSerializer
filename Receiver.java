@@ -4,11 +4,13 @@ import java.io.FileOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+import org.jdom2.*;
+
 public class Receiver
 {
 	private static Deserializer deserializer = null;
 	private static Visualizer visualizer = null;
-	private static SocketAcceptor socketAcceptor = null;
+	private static Network socketAcceptor = null;
 	
 	public static boolean connected;
 	
@@ -16,9 +18,9 @@ public class Receiver
 	{
 		initialize(args);
 		
-		String message = socketAcceptor.getMessage();
+		String message = socketAcceptor.recieve();
 		
-		Document doc = deserializer.stringToDocument(message);
+		Document doc = deserializer.stringToDoc(message);
 		Object obj = deserializer.deserialize(doc);
 		
 		visualizer.visualize(obj, true);
@@ -28,12 +30,9 @@ public class Receiver
 	{
 		connected = true;
 		
-		socketAcceptor = new SocketAcceptor(4321);
-		
+		socketAcceptor = new Network(12555);
 		deserializer = new Deserializer();
 		visualizer = new Visualizer();
 		
-		if(connected)
-			socketAcceptor.acceptConnection();
 	}
 }
