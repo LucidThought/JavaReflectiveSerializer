@@ -17,13 +17,19 @@ public class Receiver
 	public static void main(String[] args)
 	{
 		initialize(args);
-		
+		try
+		{
 		String message = socketAcceptor.recieve();
 		
 		Document doc = deserializer.stringToDoc(message);
-		Object obj = deserializer.deserialize(doc);
-		
+		Object obj = deserializer.deserializeThis(doc);
+
 		visualizer.visualize(obj, true);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	public static void initialize(String[] args)

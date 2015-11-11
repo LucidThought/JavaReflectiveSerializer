@@ -40,26 +40,40 @@ public class Serializer
 		target.getRootElement().addContent(thisObject);
 
 		Field[] myFields = objectClass.getDeclaredFields();
-		for(int f = 0; f < myFields.length; f++)
+		if (!objectClass.isArray())
 		{
-			if (!myFields[f].isAccessible())
-				myFields[f].setAccessible(true);
-
-			Element fieldElement = new Element("field");
-			fieldElement.setAttribute("name",myFields[f].getName());
-			fieldElement.setAttribute("declaringclass",myFields[f].getDeclaringClass().getName());
-			Class type = myFields[f].getType();
-			Object inner = myFields[f].get(object);
-			if (Modifier.isTransient(myFields[f].getModifiers()))
+			for(int f = 0; f < myFields.length; f++)
 			{
-				inner = null;
-			}
-			fieldElement.addContent(innerSerialize(type, inner, target));
+				if (!myFields[f].isAccessible())
+					myFields[f].setAccessible(true);
 
-			thisObject.addContent(fieldElement);
+				Element fieldElement = new Element("field");
+				fieldElement.setAttribute("name",myFields[f].getName());
+				fieldElement.setAttribute("declaringclass",myFields[f].getDeclaringClass().getName());
+				Class type = myFields[f].getType();
+				Object inner = myFields[f].get(object);
+				if (Modifier.isTransient(myFields[f].getModifiers()))
+				{
+					inner = null;
+				}
+				fieldElement.addContent(innerSerialize(type, inner, target));
+
+				thisObject.addContent(fieldElement);
+			}
+		}
+		else 
+		{
+			Class componentType = objectClass.getComponentType();
+			int length = Array.getLength(object);
+			thisObject.setAttribute("length", Integer.toString(length));
+			for(int l = 0; l < length; l++)
+			{
+				thisObject.addContent(innerSerialize(componentType,Array.get(object,l),target));
+			}
 		}
 		return target;
-/*
+	}
+/* ///// ::TA CODE HERE:: /////
 		if(object == null)
 		{
 			
@@ -135,8 +149,9 @@ public class Serializer
 		}
 		
 		return doc;
-*/
+
 	}
+*/
 
 	private Element innerSerialize(Class type, Object owner, Document target) throws Exception
 	{

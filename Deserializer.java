@@ -4,17 +4,23 @@ import java.util.Scanner;
 import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.util.*;
+import java.lang.reflect.*;
+import java.lang.*;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+import java.io.FileWriter;
 
 public class Deserializer
 {
 	private Scanner in;
+	private HashMap<Integer, Object> referenceMap = new HashMap<Integer, Object>();
 
 	public Deserializer()
 	{
 		in = new Scanner(System.in);
 	}
 
-	public Document stringToDoc(String message)
+	public Document stringToDoc(String message) throws Exception
 	{
 		Document doc = null;
 		try
@@ -22,6 +28,13 @@ public class Deserializer
 			SAXBuilder docBuilder = new SAXBuilder();
 			InputStream docStream = new ByteArrayInputStream(message.getBytes("UTF-8"));
 			doc = docBuilder.build(docStream);
+			
+			XMLOutputter outfile = new XMLOutputter();
+			outfile.setFormat(Format.getPrettyFormat());
+			//outfile.output(message, System.out);
+			
+			outfile.output(doc, new FileWriter("newxml.xml"));
+			System.out.println("File Saved");
 		}
 		catch (Exception e)
 		{
@@ -29,10 +42,25 @@ public class Deserializer
 		}
 		return doc;
 	}
-	
-	public Object parseDocument(Document doc)
+/*	
+	public Object parseDocument(Document doc) throws Exception
 	{
 		List<Element> objectElements = doc.getRootElement().getChildren("object");
+		for (Element objectElement: objectElements)
+		{
+			String className = objectElement.getAttributeValue("class");
+			Class<?> tmpClass = Class.forName(className);
+			Object obj = referenceMap.get(objectElement.getAttribute("id").getIntValue());
+			if(tmpClass.isArray())
+			{
+				//setArray(obj, tmpClass, objectElement);
+			}
+			else
+			{
+				List<Element> fieldElement = objectElement.getChildren("field");
+			}
+		}
+		return obj;
 	}
 
 	public Object deserialize(Document doc)
@@ -46,6 +74,124 @@ public class Deserializer
 		catch(Exception e)
 		{
 			e.printStackTrace();
+		}
+		return obj;
+	}
+*/
+	public Object deserializeThis(Document state) throws Exception
+	{
+		List objects = state.getRootElement().getChildren();
+
+		Map map = new HashMap();
+		instantiate(map, objects);
+		assignValues(map, objects);
+
+		return map.get("0");
+	}
+
+	public void instantiate(Map map, List objects) throws Exception
+	{
+		for(int i = 0; i<objects.size(); i++)
+		{
+			Element objElem = (Element) objects.get(i);
+			Class objClass = Class.forName(objElem.getAttributeValue("class"));
+			Object instanceOf = null;
+			if(!objClass.isArray())
+			{
+				Constructor cons = objClass.getDeclaredConstructor(); //get no-arg constructor
+				if(!Modifier.isPublic(cons.getModifiers()))
+				{
+					cons.setAccessible(true);
+				}
+				instanceOf = cons.newInstance();
+			}
+			else
+			{
+				instanceOf = Array.newInstance(objClass.getComponentType(), Integer.parseInt(objElem.getAttributeValue("length")));
+			}
+			map.put(objElem.getAttributeValue("id"), instanceOf);
+		}
+	}
+
+	public void assignValues(Map map, List objects) throws Exception
+	{
+		for(int i = 0; i<objects.size(); i++)
+		{
+			Element objElem = (Element) objects.get(i);
+			Object instanceOf = map.get(objElem.getAttributeValue("id"));
+			List fieldElems = objElem.getChildren();
+			if(!instanceOf.getClass().isArray())
+			{
+				for(int e = 0; e < fieldElems.size(); e++)
+				{
+					Element field = (Element) fieldElems.get(e);
+					String dc = field.getAttributeValue("declaringclass");
+					Class declaringClass = Class.forName(dc);
+					String fName = field.getAttributeValue("name");
+					Field f = declaringClass.getDeclaredField(fName);
+					if(!Modifier.isPublic(f.getModifiers())) {
+						f.setAccessible(true); }
+				}
+			}
+			else
+			{
+				Class component = instanceOf.getClass().getComponentType();
+				for (int a = 0; a<fieldElems.size(); a++)
+				{
+					Array.set(instanceOf, a, deserializeVal((Element) fieldElems.get(a), component, map));
+				}
+			}
+		}
+	}
+
+	public Object deserializeVal(Element elem, Class type, Map map) throws ClassNotFoundException
+	{
+		String eType = elem.getName();
+		if (eType.equals("null"))
+			return null;
+		else if (eType.equals("reference"))
+			return map.get(elem.getText());
+		else
+		{
+			if (type.equals(boolean.class)) 
+			{
+				if (elem.getText().equals("true"))
+					return Boolean.TRUE;
+				else
+					return Boolean.FALSE;			
+			}
+			else if (type.equals(byte.class))
+			{
+				return Byte.valueOf(elem.getText());
+			}
+			else if (type.equals(short.class))
+			{
+				return Short.valueOf(elem.getText());
+			}
+			else if (type.equals(long.class))
+			{
+				return Long.valueOf(elem.getText());
+			}
+			else if (type.equals(float.class))
+			{
+				return Float.valueOf(elem.getText());
+			}
+			else if (type.equals(int.class))
+			{
+				return Integer.valueOf(elem.getText());
+			}
+			else if (type.equals(double.class))
+			{
+				return Double.valueOf(elem.getText());
+			}
+			else if (type.equals(char.class))
+			{
+				return Character.valueOf(elem.getText().charAt(0));
+			}
+			else
+			{
+				return elem.getText();
+			}
 		}
 	}
 }
