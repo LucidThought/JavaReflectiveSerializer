@@ -10,9 +10,7 @@ public class ObjectCreator
 	private String className;
 	private Scanner in;
 	private Class userClass = null;
-	private Object userObject = null;
-	public UI messages = new UI();
-	
+	private Object userObject = null;	
 
 	public ObjectCreator()
 	{
@@ -22,23 +20,23 @@ public class ObjectCreator
 	public Object createObject()
 	{	
 		Object object = null;
-		messages.printObjectTypes();
+		UI.printObjectTypes();
 		String selection = in.nextLine();
 		
 		if(selection.equalsIgnoreCase("1")) {
 			return makeSimpleClass();
 		}
 		else if(selection.equalsIgnoreCase("2")) {
-						System.out.println("make this");
+			return makeReferenceClass();
 		}
 		else if(selection.equalsIgnoreCase("3")) {
-						System.out.println("make this");
+			return makePrimitiveArray();
 		}
 		else if(selection.equalsIgnoreCase("4")) {
-						System.out.println("make this");
+			return makeComplexArray();
 		}
 		else if(selection.equalsIgnoreCase("5")) {
-						System.out.println("make this");
+			return makeCollectionObject();
 		}
 	
 		return object;
@@ -51,33 +49,69 @@ public class ObjectCreator
 
 		System.out.print("Give me a number (integer): ");
 		simple.numberOne = in.nextInt();
-		in.nextLine();
-		System.out.print("Give me some letters (String): ");
-		simple.lettersTwo = in.nextLine();
+		//in.nextLine();
+		System.out.print("Give me another number (integer): ");
+		simple.numberTwo = in.nextInt();
 		
 		return simple;
 	}
-	
 
-/*	private SimpleObject createSimpleObject()
+	private SimpleReference makeReferenceClass()
 	{
-		int a = GUI.getIntInput("Enter value for field \"a\":");
-		int b = 
-		
-		return SimpleObject(a,b)
-	} */
+		System.out.println("Simple Reference Object:: ");
+		System.out.print("Give me the first number (integer): ");
+		int one = in.nextInt();
+		System.out.print("Give me the second number (integer): ");
+		int two = in.nextInt();
+		System.out.print("Give me the thrid number (integer): ");
+		int three = in.nextInt();
+		System.out.print("Give me the fourth number (integer): ");
+		int four = in.nextInt();
+
+		SimpleReference refer = new SimpleReference(one,two,three,four);
+		return refer;
+	}
 	
-/*	private ObjectCollectionsObject createObjectsCollectionObject()
+	private PrimitiveArray makePrimitiveArray()
 	{
-		Vector<Object> list = new Vecotr<Object>();
-		
-		int collectionSize = GUI.getIntInput(.....);
-		
-		for(int i = 0; i < collectionSize; i++)
+		System.out.println("How many integers would you like to store? ");
+		int length = in.nextInt();
+		int[] simpleArray = new int[length];
+		for(int n = 0; n<length; n++)
 		{
-			list.add(createObject());
+			System.out.print("Give me an integer: ");
+			simpleArray[n] = in.nextInt();
 		}
-		
-		return new ObjectCollectionObject(list);
-	} */
+		System.out.println("I am satisfied with your array of " + length + " integers");
+		PrimitiveArray prim = new PrimitiveArray(simpleArray);
+		return prim;
+	}
+
+	private ComplexArray makeComplexArray()
+	{
+		System.out.println("How many objects would you like to make? ");
+		int length = in.nextInt();
+		SimpleClass[] complexArray = new SimpleClass[length];
+		for(int n = 0; n<length; n++)
+		{
+			complexArray[n] = makeSimpleClass();
+		}
+		ComplexArray comp = new ComplexArray(complexArray);
+		return comp;
+	}
+
+	private CollectionObject makeCollectionObject()
+	{
+		int temp;
+		CollectionObject collectNums = new CollectionObject();
+		System.out.println("Enter numbers to add to your List, and a negative number finalize the list");
+		while(true)
+		{
+			temp = in.nextInt();
+			if (temp < 0)
+				break;
+			collectNums.addToList(temp);
+		}
+		return collectNums;
+	}
 }

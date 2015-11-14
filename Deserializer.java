@@ -9,11 +9,12 @@ import java.lang.*;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import java.io.FileWriter;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Deserializer
 {
 	private Scanner in;
-	private HashMap<Integer, Object> referenceMap = new HashMap<Integer, Object>();
 
 	public Deserializer()
 	{
@@ -31,9 +32,8 @@ public class Deserializer
 			
 			XMLOutputter outfile = new XMLOutputter();
 			outfile.setFormat(Format.getPrettyFormat());
-			//outfile.output(message, System.out);
 			
-			outfile.output(doc, new FileWriter("newxml.xml"));
+			outfile.output(doc, new FileWriter("Recieved.xml"));
 			System.out.println("File Saved");
 		}
 		catch (Exception e)
@@ -42,43 +42,8 @@ public class Deserializer
 		}
 		return doc;
 	}
-/*	
-	public Object parseDocument(Document doc) throws Exception
-	{
-		List<Element> objectElements = doc.getRootElement().getChildren("object");
-		for (Element objectElement: objectElements)
-		{
-			String className = objectElement.getAttributeValue("class");
-			Class<?> tmpClass = Class.forName(className);
-			Object obj = referenceMap.get(objectElement.getAttribute("id").getIntValue());
-			if(tmpClass.isArray())
-			{
-				//setArray(obj, tmpClass, objectElement);
-			}
-			else
-			{
-				List<Element> fieldElement = objectElement.getChildren("field");
-			}
-		}
-		return obj;
-	}
 
-	public Object deserialize(Document doc)
-	{
-		Object obj = null;
-		try
-		{
-			//initialiazeReferenceMap(doc);
-			obj = parseDocument(doc);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		return obj;
-	}
-*/
-	public Object deserializeThis(Document state) throws Exception
+	public static Object deserializeThis(Document state) throws Exception
 	{
 		List objects = state.getRootElement().getChildren();
 
@@ -89,7 +54,7 @@ public class Deserializer
 		return map.get("0");
 	}
 
-	public void instantiate(Map map, List objects) throws Exception
+	public static void instantiate(Map map, List objects) throws Exception
 	{
 		for(int i = 0; i<objects.size(); i++)
 		{
@@ -113,24 +78,28 @@ public class Deserializer
 		}
 	}
 
-	public void assignValues(Map map, List objects) throws Exception
+	public static void assignValues(Map map, List objects) throws Exception
 	{
 		for(int i = 0; i<objects.size(); i++)
 		{
 			Element objElem = (Element) objects.get(i);
 			Object instanceOf = map.get(objElem.getAttributeValue("id"));
+			Class declaringClass = instanceOf.getClass();
 			List fieldElems = objElem.getChildren();
 			if(!instanceOf.getClass().isArray())
 			{
 				for(int e = 0; e < fieldElems.size(); e++)
 				{
 					Element field = (Element) fieldElems.get(e);
-					String dc = field.getAttributeValue("declaringclass");
-					Class declaringClass = Class.forName(dc);
+					Element value = (Element) field.getChildren().get(0);
 					String fName = field.getAttributeValue("name");
 					Field f = declaringClass.getDeclaredField(fName);
 					if(!Modifier.isPublic(f.getModifiers())) {
 						f.setAccessible(true); }
+					if(field.getChild("value") == null) {
+						f.set(instanceOf, deserializeVal(value, f.getType(), map)); }
+					else {
+						f.set(instanceOf, deserializeVal(value, f.getType(), map)); }
 				}
 			}
 			else
@@ -144,7 +113,7 @@ public class Deserializer
 		}
 	}
 
-	public Object deserializeVal(Element elem, Class type, Map map) throws ClassNotFoundException
+	public static Object deserializeVal(Element elem, Class type, Map map) throws ClassNotFoundException
 	{
 		String eType = elem.getName();
 		if (eType.equals("null"))
@@ -153,7 +122,7 @@ public class Deserializer
 			return map.get(elem.getText());
 		else
 		{
-			if (type.equals(boolean.class)) 
+			if (type.equals(boolean.class))
 			{
 				if (elem.getText().equals("true"))
 					return Boolean.TRUE;

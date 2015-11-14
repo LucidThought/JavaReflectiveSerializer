@@ -20,11 +20,11 @@ public class Receiver
 		try
 		{
 		String message = socketAcceptor.recieve();
-		
+		UI.confirmReceived();
 		Document doc = deserializer.stringToDoc(message);
 		Object obj = deserializer.deserializeThis(doc);
-
-		visualizer.visualize(obj, true);
+		UI.confirmBuild();
+		visualizer.visualize(obj);
 		}
 		catch(Exception e)
 		{

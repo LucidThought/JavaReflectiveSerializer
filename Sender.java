@@ -1,4 +1,3 @@
-// This is meant to be a skeleton of the Sender class for assignment 3
 import java.lang.reflect.*;
 import java.lang.Class;
 import java.util.Arrays;
@@ -36,12 +35,15 @@ public class Sender
 				String xmlString = XMLtoString(doc);
 			
 				networkConnection.send(xmlString);
+
+				connected = false;
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
 			}
 		}
+		UI.printSent();
 	}
 	
 	public static void initialize(String[] args)

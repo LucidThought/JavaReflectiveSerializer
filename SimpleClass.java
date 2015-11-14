@@ -1,15 +1,15 @@
  public class SimpleClass
  {
 	public int numberOne;
-	public String lettersTwo;
+	public int numberTwo;
 	
 	public SimpleClass()
 	{
 	}
 
-	public SimpleClass(int one, String two)
+	public SimpleClass(int one, int two)
 	{
 		numberOne = one;
-		lettersTwo = two;
+		numberTwo = two;
 	}
  }

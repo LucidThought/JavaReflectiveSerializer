@@ -1,26 +1,32 @@
 import java.net.Socket;
 import java.net.ServerSocket;
+import java.net.InetAddress;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 import org.jdom2.*;
 
 public class Network
 {
-	private Socket socket = null;
+	private ServerSocket server = null;
 	private int listeningPort = 12555;
 	private String ip = "localhost";
 	private final char END_OF_STREAM = (char)-1;
+	private Scanner in;
 	
 	public Network()
-	{ }
+	{ 
+		in = new Scanner(System.in);
+	}
 
 	public Network(int port)
 	{
 		listeningPort = port;
+		in = new Scanner(System.in);
 	}
 
 	public String recieve()
@@ -30,6 +36,8 @@ public class Network
 		boolean socketClosed = false;
 		try
 		{
+			ip = getIP();
+			listeningPort = getPort();
 			Socket ears = new Socket(ip,listeningPort);
 
 			char dataByte;
@@ -40,6 +48,8 @@ public class Network
 			}
 			socketClosed = dataByte == END_OF_STREAM;
 			reading = false;
+			if (socketClosed)
+				ears.close();
 		}
 		catch(UnknownHostException e)
 		{
@@ -57,9 +67,9 @@ public class Network
 
 	public void send(String message) throws IOException
 	{
-		ServerSocket server = new ServerSocket(listeningPort);
-		
-		System.out.println("Awaiting Connection...");
+		server = new ServerSocket(listeningPort);		
+
+		System.out.println("Server at " + server.getInetAddress() + " Awaiting Connection on Port " + server.getLocalPort() + " ...");
 		Socket clientSocket = server.accept();
 		System.out.println("Connection from "+clientSocket.getInetAddress().toString()+" accepted.");
 
@@ -67,6 +77,7 @@ public class Network
 		os.write(message.getBytes());
 		os.flush();
 		clientSocket.close();
+		server.close();
 	}
 
 	public void setIP(String newIP)
@@ -77,5 +88,18 @@ public class Network
 	public void setPort(int newPort)
 	{
 		listeningPort = newPort;
+	}
+	
+	public String getIP()
+	{
+		System.out.print("Please enter the network location of the sender: ");
+		String location = in.nextLine();
+		return location;
+	}
+	public int getPort()
+	{
+		System.out.print("Please enter the desired port: ");
+		int port = in.nextInt();
+		return port;
 	}
 }

@@ -56,7 +56,7 @@ public class Serializer
 				{
 					inner = null;
 				}
-				fieldElement.addContent(innerSerialize(type, inner, target));
+				fieldElement.addContent(serializeField(type, inner, target));
 
 				thisObject.addContent(fieldElement);
 			}
@@ -68,92 +68,13 @@ public class Serializer
 			thisObject.setAttribute("length", Integer.toString(length));
 			for(int l = 0; l < length; l++)
 			{
-				thisObject.addContent(innerSerialize(componentType,Array.get(object,l),target));
+				thisObject.addContent(serializeField(componentType,Array.get(object,l),target));
 			}
 		}
 		return target;
 	}
-/* ///// ::TA CODE HERE:: /////
-		if(object == null)
-		{
-			
-		}
-		else if(!serializedObjects.contains(object))
-		{
-			serializedObjects.add(object);
-			
-			if(currentElement++ == 0)
-			{
-				doc = new Document();
-				root = new Element("serialized");
-				doc.setRootElement(root);
-			}
-			Class<?> c = object.getClass();
-			Integer id = getID(object);
-		
-			Element objectElement = new Element("object");
-			objectElement.setAttribute(new Attribute("class", c.getName()));
-			objectElement.setAttribute(new Attribute("id", id.toString()));
-			doc.getRootElement().addContent(objectElement);
 
-			if(c.isArray())
-			{
-				Object array = object;
-				objectElement.setAttribute(new Attribute("length", Integer.toString(Array.getLength(array))));
-				
-				if(c.getComponentType().isPrimitive())
-				{
-					for(int i = 0;i<Array.getLength(array);i++)
-					{
-						Element value = new Element("value");
-						value.setText(Array.get(c,i).toString());
-						objectElement.addContent(value);
-					}
-				}
-				else
-				{
-					for(int j = 0;j < Array.getLength(array);j++)
-					{
-						Element ref = new Element("reference");
-						id = getID(Array.get(c,j));
-						if(id != -1)
-						{
-							ref.setText("");
-							// add each array element
-						}
-					}
-					for(int k = 0;k<Array.getLength(array);k++)
-					{
-						serialize(Array.get(array,k));
-					}
-				}
-			}
-			else
-			{
-				Class<?> tmpClass = c;
-				while(tmpClass != null)
-				{
-					Field[] fields = tmpClass.getDeclaredFields();
-					ArrayList<Element> fieldXML = serializeFields(fields, object);
-					for(Element element:fieldXML)
-						objectElement.addContent(element);
-					
-					tmpClass = tmpClass.getSuperclass();
-				}
-			}
-		}
-		if(currentElement == 0)
-		{
-			serializedObjects.clear();
-			referenceID = 0;
-		}
-		
-		return doc;
-
-	}
-*/
-
-	private Element innerSerialize(Class type, Object owner, Document target) throws Exception
+	private Element serializeField(Class type, Object owner, Document target) throws Exception
 	{
 		if (owner == null)
 			return new Element("null");
@@ -175,25 +96,5 @@ public class Serializer
 			value.setText(owner.toString());
 			return value;
 		}
-	}
-
-	private ArrayList<Element> serializeFields(Field[] fields, Object object)
-	{
-		ArrayList<Element> elements = new ArrayList<Element>();
-		for(Field f : fields)
-		{
-			try
-			{
-				if(!f.isAccessible())
-					f.setAccessible(true);
-				
-				// Add code here for recursion if the Field is not primitive
-			}
-			catch(Exception e)
-			{
-				
-			}
-		}
-		return elements;
 	}
 }
