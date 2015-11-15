@@ -63,7 +63,7 @@ public class Deserializer
 			Object instanceOf = null;
 			if(!objClass.isArray())
 			{
-				Constructor cons = objClass.getDeclaredConstructor(); //get no-arg constructor
+				Constructor cons = objClass.getDeclaredConstructor(); //no arguments in this constructor
 				if(!Modifier.isPublic(cons.getModifiers()))
 				{
 					cons.setAccessible(true);

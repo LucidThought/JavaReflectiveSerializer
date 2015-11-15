@@ -57,9 +57,11 @@ public class Network
 		}
 		catch(SocketTimeoutException e)
 		{
+			e.printStackTrace();
 		}
 		catch(IOException e)
 		{
+			e.printStackTrace();
 		}
 		return message.toString();
 
