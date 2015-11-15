@@ -8,12 +8,10 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-import org.jdom2.*;
-
 public class Network
 {
 	private ServerSocket server = null;
-	private int listeningPort = 12555;
+	private int listeningPort = 31337;
 	private String ip = "localhost";
 	private final char END_OF_STREAM = (char)-1;
 	private Scanner in;

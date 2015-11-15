@@ -36,7 +36,7 @@ public class Receiver
 	{
 		connected = true;
 		
-		socketAcceptor = new Network(12555);
+		socketAcceptor = new Network(31337);
 		deserializer = new Deserializer();
 		visualizer = new Visualizer();
 		
