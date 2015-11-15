@@ -53,13 +53,11 @@ public class Serializer
 				Element fieldElement = new Element("field");
 				fieldElement.setAttribute("name",myFields[f].getName());
 				fieldElement.setAttribute("declaringclass",myFields[f].getDeclaringClass().getName());
-				Class type = myFields[f].getType();
-				Object inner = myFields[f].get(object);
 				if (Modifier.isTransient(myFields[f].getModifiers()))
 				{
 					inner = null;
 				}
-				fieldElement.addContent(serializeField(type, inner, target));
+				fieldElement.addContent(serializeField(myFields[f].getType(), myFields[f].get(object), target));
 
 				thisObject.addContent(fieldElement);
 			}

@@ -127,14 +127,8 @@ public class Deserializer
 			return map.get(elem.getText());
 		else
 		{
-			if (type.equals(boolean.class))
-			{
-				if (elem.getText().equals("true"))
-					return Boolean.TRUE;
-				else
-					return Boolean.FALSE;			
-			}
-			else if (type.equals(byte.class))
+
+			if (type.equals(byte.class))
 			{
 				return Byte.valueOf(elem.getText());
 			}
@@ -161,6 +155,13 @@ public class Deserializer
 			else if (type.equals(char.class))
 			{
 				return Character.valueOf(elem.getText().charAt(0));
+			}
+			else if (type.equals(boolean.class))
+			{
+				if (elem.getText().equals("true"))
+					return Boolean.TRUE;
+				else
+					return Boolean.FALSE;			
 			}
 			else
 			{
