@@ -30,8 +30,7 @@ public class Deserializer
 		try
 		{
 			SAXBuilder docBuilder = new SAXBuilder();
-			InputStream
- docStream = new ByteArrayInputStream(message.getBytes("UTF-8"));
+			InputStream docStream = new ByteArrayInputStream(message.getBytes("UTF-8"));
 			doc = docBuilder.build(docStream);
 			
 			XMLOutputter outfile = new XMLOutputter();
@@ -67,7 +66,7 @@ public class Deserializer
 			Object instanceOf = null;
 			if(!objClass.isArray())
 			{
-				Constructor cons = objClass.getDeclaredConstructor(); //no arguments in this constructor
+				Constructor cons = objClass.getDeclaredConstructor();//get default constructor
 				if(!Modifier.isPublic(cons.getModifiers()))
 				{
 					cons.setAccessible(true);
