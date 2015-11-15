@@ -1,3 +1,4 @@
+import java.util.Scanner;
 
 public class UI
 {
@@ -24,5 +25,19 @@ public class UI
 	public static void confirmBuild()
 	{
 		System.out.println("\n:: Document deserialized into Object(s) ::\n");
+	}
+	public static boolean printMethods()
+	{
+		Scanner in = new Scanner(System.in);
+		System.out.println("Would you like to show Methods and Constructors? (y)es/(n)o ");
+		String showMe = in.nextLine();
+		if (showMe.equalsIgnoreCase("n") || showMe.equalsIgnoreCase("no"))
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 }

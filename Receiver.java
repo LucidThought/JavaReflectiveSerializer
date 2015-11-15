@@ -24,7 +24,7 @@ public class Receiver
 		Document doc = deserializer.stringToDoc(message);
 		Object obj = deserializer.deserializeThis(doc);
 		UI.confirmBuild();
-		visualizer.visualize(obj);
+		visualizer.visualize(obj, UI.printMethods());
 		}
 		catch(Exception e)
 		{

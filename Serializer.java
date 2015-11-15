@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.ArrayList;
+import java.lang.Integer;
+import java.util.Vector;
+import java.util.List;
 
 import org.jdom2.Element;
 import org.jdom2.Document;

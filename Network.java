@@ -71,7 +71,7 @@ public class Network
 	{
 		server = new ServerSocket(listeningPort);		
 
-		System.out.println("Server at " + server.getInetAddress() + " Awaiting Connection on Port " + server.getLocalPort() + " ...");
+		System.out.println("Server at " + ip + " Awaiting Connection on Port " + server.getLocalPort() + " ...");
 		Socket clientSocket = server.accept();
 		System.out.println("Connection from "+clientSocket.getInetAddress().toString()+" accepted.");
 

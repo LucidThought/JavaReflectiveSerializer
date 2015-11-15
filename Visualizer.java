@@ -2,6 +2,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.*;
 import java.lang.Class;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.lang.Integer;
+import java.util.Vector;
+import java.util.List;
 
 public class Visualizer
 {
@@ -9,7 +13,7 @@ public class Visualizer
 	{
 	}
 
-	public void visualize(Object obj)
+	public void visualize(Object obj, boolean methodsConstructors)
 	{
 		try
 		{
@@ -34,7 +38,7 @@ public class Visualizer
 				{
 					System.out.println("\t\tHash Code: " + myFields[f].hashCode());
 					System.out.println("------- Complex Field Type Start -------\n");
-					visualize(myFields[f].get(obj));
+					visualize(myFields[f].get(obj), methodsConstructors);
 					System.out.println("\n------- Complex Field Type End -------\n");
 				}
 				else
@@ -49,42 +53,45 @@ public class Visualizer
 					for (int a = 0; a < length; a++)
 					{
 						Object arrayElement = Array.get(obj, a);
-						if(objectClass.isPrimitive()) 
+						if(objectClass.getComponentType().isPrimitive()) 
 						{
 							System.out.println("[" + a + "] : " + arrayElement);
 						}
 						else
 						{
 							System.out.println("\t+++ START Complex Array Element ["+ a + "] +++");
-							visualize(arrayElement);
+							visualize(arrayElement, methodsConstructors);
 							System.out.println("\t--- END Complex Array Element ["+ a + "] ---\n");
 						}
 					}
 				}
 /////////////
-			Constructor[] constructors = objectClass.getDeclaredConstructors();
-			System.out.println("-= Constructors: ");
-			for (int c = 0; c < constructors.length; c++)
+			if (methodsConstructors == true)
 			{
-				Class[] constructParams = constructors[c].getParameterTypes();
-				System.out.println("\tConstructor["+c+"] Parameters: " + listTypes(constructParams));
-				System.out.println("\tConstructor["+c+"] Modifiers: " + listModifiers(constructors[c].getModifiers()));
-			}
+				Constructor[] constructors = objectClass.getDeclaredConstructors();
+				System.out.println("-= Constructors: ");
+				for (int c = 0; c < constructors.length; c++)
+				{
+					Class[] constructParams = constructors[c].getParameterTypes();
+					System.out.println("\tConstructor["+c+"] Parameters: " + listTypes(constructParams));
+					System.out.println("\tConstructor["+c+"] Modifiers: " + listModifiers(constructors[c].getModifiers()));
+				}
 
-			Method[] myMethods = objectClass.getMethods();
-			System.out.println("-= Methods: ");
-			Class returnType;
-			for(int i=0; i<myMethods.length; i++)
-			{
-				System.out.println("\t" + myMethods[i].getName() + ":");
-				Class[] exceptionTypes = myMethods[i].getExceptionTypes();
-				System.out.println("\t\tException Types: " + listTypes(exceptionTypes));
-				Class[] parameterTypes = myMethods[i].getParameterTypes();
-				System.out.println("\t\tParameter Types: " + listTypes(parameterTypes));
-				returnType = myMethods[i].getReturnType();
-				System.out.println("\t\tReturn Type: " + returnType.getName());
-				System.out.print("\t\tModifiers: ");
-				System.out.println(listModifiers(myMethods[i].getModifiers()));
+				Method[] myMethods = objectClass.getMethods();
+				System.out.println("-= Methods: ");
+				Class returnType;
+				for(int i=0; i<myMethods.length; i++)
+				{
+					System.out.println("\t" + myMethods[i].getName() + ":");
+					Class[] exceptionTypes = myMethods[i].getExceptionTypes();
+					System.out.println("\t\tException Types: " + listTypes(exceptionTypes));
+					Class[] parameterTypes = myMethods[i].getParameterTypes();
+					System.out.println("\t\tParameter Types: " + listTypes(parameterTypes));
+					returnType = myMethods[i].getReturnType();
+					System.out.println("\t\tReturn Type: " + returnType.getName());
+					System.out.print("\t\tModifiers: ");
+					System.out.println(listModifiers(myMethods[i].getModifiers()));
+				}
 			}
 			
 		}

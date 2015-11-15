@@ -12,6 +12,9 @@ import java.io.FileWriter;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.lang.Integer;
+import java.util.Vector;
+import java.util.List;
 
 public class Deserializer
 {
@@ -28,7 +31,8 @@ public class Deserializer
 		try
 		{
 			SAXBuilder docBuilder = new SAXBuilder();
-			InputStream docStream = new ByteArrayInputStream(message.getBytes("UTF-8"));
+			InputStream
+ docStream = new ByteArrayInputStream(message.getBytes("UTF-8"));
 			doc = docBuilder.build(docStream);
 			
 			XMLOutputter outfile = new XMLOutputter();
