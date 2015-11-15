@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.ArrayList;
 import java.lang.Integer;
-import java.util.Vector;
 import java.util.List;
 
 import org.jdom2.Element;
@@ -17,14 +16,7 @@ import org.jdom2.output.XMLOutputter;
 
 public class Serializer
 {
-	private Document doc = null;
-	private Element root;
-	
-	private Integer referenceID = 0;
 	private IdentityHashMap myMap = null;
-	
-	private int currentElement = 0;
-	private ArrayList<Object> serializedObjects = new ArrayList<Object>();
 	
 	public Serializer()
 	{

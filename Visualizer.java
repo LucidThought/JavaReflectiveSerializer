@@ -39,7 +39,7 @@ public class Visualizer
 					System.out.println("\t\tHash Code: " + myFields[f].hashCode());
 					System.out.println("------- Complex Field Type Start -------\n");
 					visualize(myFields[f].get(obj), methodsConstructors);
-					System.out.println("\n------- Complex Field Type End -------\n");
+					System.out.println("------- Complex Field Type End -------\n");
 				}
 				else
 				{
