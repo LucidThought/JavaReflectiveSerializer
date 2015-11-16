@@ -15,7 +15,7 @@ public class UI
 
 	public static void printSent()
 	{
-		System.out.println("Your current java runtime environment has been sent");
+		System.out.println("\nYour current java runtime environment has been sent\n");
 	}
 
 	public static void confirmReceived()

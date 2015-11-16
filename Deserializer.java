@@ -99,10 +99,7 @@ public class Deserializer
 					Field f = declaringClass.getDeclaredField(fName);
 					if(!Modifier.isPublic(f.getModifiers())) {
 						f.setAccessible(true); }
-					if(field.getChild("value") == null) {
-						f.set(instanceOf, deserializeVal(value, f.getType(), map)); }
-					else {
-						f.set(instanceOf, deserializeVal(value, f.getType(), map)); }
+					f.set(instanceOf, deserializeVal(value, f.getType(), map));
 				}
 			}
 			else
